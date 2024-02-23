@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -43,15 +42,10 @@ public class HandlerExceptionController {
         return ResponseEntity.status(404).body(error);
     } 
 
-    @ExceptionHandler({HttpMessageNotWritableException.class, UserNotFoundException.class})
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Error> nullPointer(Exception e){
 
-        if(e instanceof HttpMessageNotWritableException){
-            error = new Error(e.getMessage(), "El Role no existe!", 500, new Date());
-        }else if( e instanceof UserNotFoundException){
-            error = new Error(e.getMessage(), "Error 500, usuario no encontrado", 500, new Date());
-        }
-        
+        error = new Error(e.getMessage(), "Error 500, usuario no encontrado", 500, new Date());
         return ResponseEntity.status(500).body(error);
     } 
 

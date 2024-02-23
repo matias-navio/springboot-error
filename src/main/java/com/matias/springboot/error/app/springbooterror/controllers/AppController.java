@@ -1,8 +1,5 @@
 package com.matias.springboot.error.app.springbooterror.controllers;
 
-
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +26,10 @@ public class AppController {
 
     @GetMapping("/users/{id}")
     public User users(@PathVariable Long id){
-        User user = uService.findById(id);
         // en caso de que el usuario sea null lanzamos una excepcion de nuestra clase que creamos para manejarla
-        if(user == null){
-            throw new UserNotFoundException("El usuario no existe en la base de datos!");
-        }
+        User user = uService.findById(id).
+        orElseThrow(() -> new UserNotFoundException("El usuario no existe en la base de datos!"));
+
         return user;
     }
 }
